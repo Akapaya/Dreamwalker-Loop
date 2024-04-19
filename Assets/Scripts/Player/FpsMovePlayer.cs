@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Device;
+using UnityEngine.Events;
 
 public class FpsMovePlayer : MonoBehaviour
 {
@@ -14,12 +15,31 @@ public class FpsMovePlayer : MonoBehaviour
 
     private bool lockMovement = false;
 
+    public Transform groundCheck;
+    public float groundDistance = 0.4f;
+    public LayerMask groundMask;
+
+    private bool isGrounded;
+
+    [SerializeField] private PlayAudioByTime playAudioByTime;
+
     private void Update()
     {
         if (!lockMovement)
         {
             eixoX = Input.GetAxisRaw("Horizontal");
             eixoY = Input.GetAxisRaw("Vertical");
+        }
+
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+        if (eixoX != 0 && isGrounded || eixoY != 0 && isGrounded)
+        {
+            playAudioByTime.SetIsPlayingTrue();
+        }
+        else
+        {
+            playAudioByTime.SetIsPlayingFalse();
         }
     }
 
