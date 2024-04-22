@@ -20,6 +20,7 @@ public class EyeViewEffect : MonoBehaviour
     float targetExposureValue = -10;
 
     public UnityEvent OnConcludedCloseEffect = new UnityEvent();
+    public UnityEvent OnConcludedCloseEye = new UnityEvent();
 
     #region StartMethods
     private void Start()
@@ -33,7 +34,7 @@ public class EyeViewEffect : MonoBehaviour
 
     #region Effects
     [ContextMenu("CloseEyesHold")]
-    public void CloseEyesHold()
+    public void CloseEyesHold(bool isClosingEye)
     {
         if ( ColorAdjustments.postExposure.value != targetExposure)
         {
@@ -43,6 +44,10 @@ public class EyeViewEffect : MonoBehaviour
         }
         else
         {
+            if (isClosingEye)
+            {
+                OnConcludedCloseEye.Invoke();
+            }
             OnConcludedCloseEffect.Invoke();
         }
     }

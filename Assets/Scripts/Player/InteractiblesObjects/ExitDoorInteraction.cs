@@ -8,6 +8,7 @@ public class ExitDoorInteraction : MonoBehaviour, IinteractibleObject
     private bool isHoldingDoor = false;
 
     public UnityEvent OnUseDoor = new UnityEvent();
+    public UnityEvent<bool> OnUsingDoor = new UnityEvent<bool>();
 
     public bool InUse { get => isHoldingDoor; set => isHoldingDoor = value; }
 
@@ -15,12 +16,16 @@ public class ExitDoorInteraction : MonoBehaviour, IinteractibleObject
     {
         if (isHoldingDoor)
         {
-            OnUseDoor.Invoke();
+            OnUsingDoor.Invoke(false);
         }
     }
 
     public void UseObject()
     {
+        if(isHoldingDoor == false)
+        {
+            OnUseDoor.Invoke();
+        }
         isHoldingDoor = true;
     }
 

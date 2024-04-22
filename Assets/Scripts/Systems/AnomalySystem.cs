@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AnomalySystem : MonoBehaviour
 {
@@ -8,9 +9,13 @@ public class AnomalySystem : MonoBehaviour
     private Queue<AnomalyManager> anomalyManagersQueue = new Queue<AnomalyManager>();
     private AnomalyManager actualAnomaly;
 
+    [SerializeField]  private AnomalyManager finalAnomaly;
+    [SerializeField]  private AnomalyManager secretAnomaly;
+
+    public UnityEvent WrongExit = new UnityEvent();
+
     private void Start()
     {
-        // Aleatorize a ordem da lista
         System.Random rng = new System.Random();
         int n = anomalyManagersList.Count;
         while (n > 1)
@@ -22,7 +27,6 @@ public class AnomalySystem : MonoBehaviour
             anomalyManagersList[n] = value;
         }
 
-        // Coloque os elementos aleatorizados na fila
         foreach (AnomalyManager manager in anomalyManagersList)
         {
             anomalyManagersQueue.Enqueue(manager);
@@ -34,15 +38,64 @@ public class AnomalySystem : MonoBehaviour
         if(actualAnomaly != null)
         {
             actualAnomaly.StopAnomaly();
+            actualAnomaly = null;
         }
     }
 
     public void ActivateAnomaly()
     {
-        if (Random.Range(0, 101) <= 50)
+        if (CheckIfEndAnomaliesQueue() == false)
         {
-            actualAnomaly = anomalyManagersQueue.Dequeue();
-            actualAnomaly.StartAnomaly();
+            if (Random.Range(0, 101) <= 50)
+            {
+                actualAnomaly = anomalyManagersQueue.Dequeue();
+                actualAnomaly.StartAnomaly();
+                Debug.Log(anomalyManagersQueue.Count);
+            }
+        }
+    }
+
+    public bool CheckIfEndAnomaliesQueue()
+    {
+        if (anomalyManagersQueue.Count <=0)
+        {
+            ActivateFinalRoom();
+            return true;
+        }
+
+        if (GameManager.CheckIfGetAllPagesHandle.Invoke())
+        {
+            ActivateFinalRoom();
+            Invoke("ActivateSecretRoom", 5f);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void ActivateFinalRoom()
+    {
+        finalAnomaly.StartAnomaly();
+    }
+
+    private void ActivateSecretRoom()
+    {
+        secretAnomaly.StartAnomaly();
+    }
+
+    public void CheckBlinkEyeExit()
+    {
+        if(actualAnomaly == null)
+        {
+            WrongExit.Invoke();
+        }
+    }
+
+    public void CheckDoorExit()
+    {
+        if (actualAnomaly != null)
+        {
+            WrongExit.Invoke();
         }
     }
 }

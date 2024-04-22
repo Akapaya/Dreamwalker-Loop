@@ -7,7 +7,7 @@ public class EyeController : MonoBehaviour
 {
     private bool isHoldingEye = false;
 
-    public UnityEvent OnHoldingToCloseEye = new UnityEvent();
+    public UnityEvent<bool> OnHoldingToCloseEye = new UnityEvent<bool>();
     public UnityEvent OnReleaseCloseEye = new UnityEvent();
 
     void Update()
@@ -26,7 +26,7 @@ public class EyeController : MonoBehaviour
     {
         if(isHoldingEye)
         {
-            OnHoldingToCloseEye.Invoke();
+            OnHoldingToCloseEye.Invoke(true);
         }
         else
         {
