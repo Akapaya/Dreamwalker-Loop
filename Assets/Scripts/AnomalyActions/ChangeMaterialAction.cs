@@ -9,6 +9,7 @@ public class ChangeMaterialAction : MonoBehaviour, IAnomaly
 
     [SerializeField] private Material _material;
 
+    #region Process Anomaly
     public void OnActivateAnomaly()
     {
         foreach (MeshRenderer obj in _materialsToChangeList)
@@ -28,4 +29,5 @@ public class ChangeMaterialAction : MonoBehaviour, IAnomaly
             index++;
         }
     }
+    #endregion
 }

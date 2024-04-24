@@ -2,42 +2,46 @@ using UnityEngine;
 
 public class FpsCamera : MonoBehaviour
 {
-    private float rotationOnX;
+    private float _rotationOnX;
 
-    private float mouseSensitivity = 90f;
+    private float _mouseSensitivity = 90f;
 
-    public Transform player;
+    [SerializeField] private Transform _player;
 
-    private bool lockCamera = false;
+    private bool _lockCamera = false;
 
+    #region Start Methods
     private void Start()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
+    #endregion
 
+    #region Update Methods
     private void Update()
     {
-        if(!lockCamera)
+        if(!_lockCamera)
         {
-            float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * mouseSensitivity;
-            float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * mouseSensitivity;
-            rotationOnX -= mouseY;
-            rotationOnX = Mathf.Clamp(rotationOnX, -90f, 90f);
-            base.transform.localEulerAngles = new Vector3(rotationOnX, 0f, 0f);
-            player.Rotate(Vector3.up * mouseX);
+            float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * _mouseSensitivity;
+            float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * _mouseSensitivity;
+            _rotationOnX -= mouseY;
+            _rotationOnX = Mathf.Clamp(_rotationOnX, -90f, 90f);
+            base.transform.localEulerAngles = new Vector3(_rotationOnX, 0f, 0f);
+            _player.Rotate(Vector3.up * mouseX);
         }
     }
+    #endregion
 
     #region LockMethods
     public void LockCamera()
     {
-        lockCamera = true;
+        _lockCamera = true;
     }
 
     public void UnlockCamera()
     {
-        lockCamera = false;
+        _lockCamera = false;
     }
     #endregion
 }

@@ -7,14 +7,15 @@ public class RotateObjects : MonoBehaviour, IAnomaly
     [SerializeField] private List<GameObject> _objectsToRotateList;
     [SerializeField] private List<Quaternion> _defaultObjectsRotation;
 
-    [SerializeField] private float speedRotation;
-    [SerializeField] private Vector3 rotationVector;
+    [SerializeField] private float _peedRotation;
+    [SerializeField] private Vector3 _rotationVector;
 
-    private bool OnRotation = false;
+    private bool onRotation = false;
 
+    #region Process Anomaly
     public void OnActivateAnomaly()
     {
-        OnRotation = true;
+        onRotation = true;
 
         foreach (GameObject obj in _objectsToRotateList)
         {
@@ -24,18 +25,18 @@ public class RotateObjects : MonoBehaviour, IAnomaly
 
     private void Update()
     {
-        if(OnRotation)
+        if(onRotation)
         {
             foreach (GameObject obj in _objectsToRotateList)
             {
-                obj.transform.Rotate(rotationVector * speedRotation);
+                obj.transform.Rotate(_rotationVector * _peedRotation);
             }
         }
     }
 
     public void OnDeactivateAnomaly()
     {
-        OnRotation = false;
+        onRotation = false;
 
         int index = 0;
 
@@ -45,4 +46,5 @@ public class RotateObjects : MonoBehaviour, IAnomaly
             index++;
         }
     }
+    #endregion
 }

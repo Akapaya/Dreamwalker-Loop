@@ -4,36 +4,40 @@ using UnityEngine;
 
 public class PlayAudioByTime : MonoBehaviour
 {
-    [SerializeField] private bool isPlaying = false;
-    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private bool _isPlaying = false;
+    [SerializeField] private AudioSource _audioSource;
 
-    [SerializeField] private float timeToPlay = 1f;
+    [SerializeField] private float _timeToPlay = 1f;
 
+    #region StartMethods
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
         StartCoroutine(PlayFootstepSounds());
     }
+    #endregion
 
+    #region Process Audio
     IEnumerator PlayFootstepSounds()
     {
         while (true)
         {
-            if (isPlaying)
+            if (_isPlaying)
             {
-                audioSource.Play();
+                _audioSource.Play();
             }
-            yield return new WaitForSeconds(timeToPlay);
+            yield return new WaitForSeconds(_timeToPlay);
         }
     }
 
     public void SetIsPlayingTrue()
     {
-        isPlaying = true;
+        _isPlaying = true;
     }
 
     public void SetIsPlayingFalse()
     {
-        isPlaying = false;
+        _isPlaying = false;
     }
+    #endregion
 }

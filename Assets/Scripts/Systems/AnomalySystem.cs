@@ -5,40 +5,45 @@ using UnityEngine.Events;
 
 public class AnomalySystem : MonoBehaviour
 {
-    [SerializeField] private List<AnomalyManager> anomalyManagersList = new List<AnomalyManager>();
-    private Queue<AnomalyManager> anomalyManagersQueue = new Queue<AnomalyManager>();
-    private AnomalyManager actualAnomaly;
+    [SerializeField] private List<AnomalyManager> _anomalyManagersList = new List<AnomalyManager>();
+    private Queue<AnomalyManager> _anomalyManagersQueue = new Queue<AnomalyManager>();
+    private AnomalyManager _actualAnomaly;
 
-    [SerializeField]  private AnomalyManager finalAnomaly;
-    [SerializeField]  private AnomalyManager secretAnomaly;
+    [SerializeField]  private AnomalyManager _finalAnomaly;
+    [SerializeField]  private AnomalyManager _secretAnomaly;
 
+    #region Unity Events
     public UnityEvent WrongExit = new UnityEvent();
+    #endregion
 
+    #region Start Methods
     private void Start()
     {
         System.Random rng = new System.Random();
-        int n = anomalyManagersList.Count;
+        int n = _anomalyManagersList.Count;
         while (n > 1)
         {
             n--;
             int k = rng.Next(n + 1);
-            AnomalyManager value = anomalyManagersList[k];
-            anomalyManagersList[k] = anomalyManagersList[n];
-            anomalyManagersList[n] = value;
+            AnomalyManager value = _anomalyManagersList[k];
+            _anomalyManagersList[k] = _anomalyManagersList[n];
+            _anomalyManagersList[n] = value;
         }
 
-        foreach (AnomalyManager manager in anomalyManagersList)
+        foreach (AnomalyManager manager in _anomalyManagersList)
         {
-            anomalyManagersQueue.Enqueue(manager);
+            _anomalyManagersQueue.Enqueue(manager);
         }
     }
+    #endregion
 
+    #region Active and Deactive Anomaly
     public void DeactiveAnomaly()
     {
-        if(actualAnomaly != null)
+        if(_actualAnomaly != null)
         {
-            actualAnomaly.StopAnomaly();
-            actualAnomaly = null;
+            _actualAnomaly.StopAnomaly();
+            _actualAnomaly = null;
         }
     }
 
@@ -48,16 +53,18 @@ public class AnomalySystem : MonoBehaviour
         {
             if (Random.Range(0, 101) <= 50)
             {
-                actualAnomaly = anomalyManagersQueue.Dequeue();
-                actualAnomaly.StartAnomaly();
-                Debug.Log(anomalyManagersQueue.Count);
+                _actualAnomaly = _anomalyManagersQueue.Dequeue();
+                _actualAnomaly.StartAnomaly();
+                Debug.Log(_anomalyManagersQueue.Count);
             }
         }
     }
+    #endregion
 
+    #region Check Methods
     public bool CheckIfEndAnomaliesQueue()
     {
-        if (anomalyManagersQueue.Count <=0)
+        if (_anomalyManagersQueue.Count <=0)
         {
             ActivateFinalRoom();
             return true;
@@ -73,19 +80,9 @@ public class AnomalySystem : MonoBehaviour
         return false;
     }
 
-    private void ActivateFinalRoom()
-    {
-        finalAnomaly.StartAnomaly();
-    }
-
-    private void ActivateSecretRoom()
-    {
-        secretAnomaly.StartAnomaly();
-    }
-
     public void CheckBlinkEyeExit()
     {
-        if(actualAnomaly == null)
+        if (_actualAnomaly == null)
         {
             WrongExit.Invoke();
         }
@@ -93,9 +90,22 @@ public class AnomalySystem : MonoBehaviour
 
     public void CheckDoorExit()
     {
-        if (actualAnomaly != null)
+        if (_actualAnomaly != null)
         {
             WrongExit.Invoke();
         }
     }
+    #endregion
+
+    #region Secrets Rooms Anomalies
+    private void ActivateFinalRoom()
+    {
+        _finalAnomaly.StartAnomaly();
+    }
+
+    private void ActivateSecretRoom()
+    {
+        _secretAnomaly.StartAnomaly();
+    }
+    #endregion
 }

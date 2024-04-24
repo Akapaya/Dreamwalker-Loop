@@ -5,21 +5,25 @@ using UnityEngine;
 
 public class PageViewManager : MonoBehaviour
 {
-    [SerializeField] private GameObject pageObjectPanel;
-    [SerializeField] private TMP_Text diaryText;
+    [SerializeField] private GameObject _pageObjectPanel;
+    [SerializeField] private TMP_Text _diaryText;
 
+    #region Activate and Deactivate Methods
     public void ActivatePagePanel()
     {
-        pageObjectPanel.SetActive(true);
+        _pageObjectPanel.SetActive(true);
     }
 
     public void DeactivatePagePanel()
     {
-        pageObjectPanel.SetActive(false);
+        _pageObjectPanel.SetActive(false);
     }
+    #endregion
 
+    #region Setters Methods
     public void SetTextDiary(string text)
     {
-        diaryText.text = text;
+        _diaryText.text = text;
     }
+    #endregion
 }

@@ -6,6 +6,7 @@ public class SetDeactiveObjects : MonoBehaviour, IAnomaly
 {
     [SerializeField] private List<GameObject> _objectsToDeactivesList;
 
+    #region Process Anomaly
     public void OnActivateAnomaly()
     {
         foreach (GameObject obj in _objectsToDeactivesList)
@@ -21,4 +22,5 @@ public class SetDeactiveObjects : MonoBehaviour, IAnomaly
             obj.SetActive(true);
         }
     }
+    #endregion
 }

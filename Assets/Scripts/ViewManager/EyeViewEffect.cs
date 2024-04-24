@@ -11,16 +11,18 @@ public class EyeViewEffect : MonoBehaviour
     ColorAdjustments ColorAdjustments;
 
     [Header("Base Values")]
-    [SerializeField] private float modificationExposureValueByTime = 25;
-    [SerializeField] private float targetExposure = -10;
-    [SerializeField] private float timeExposureModification = 0.04f;
-    [SerializeField] private float toleranceDistance = 2;
+    [SerializeField] private float _modificationExposureValueByTime = 25;
+    [SerializeField] private float _targetExposure = -10;
+    [SerializeField] private float _timeExposureModification = 0.04f;
+    [SerializeField] private float _toleranceDistance = 2;
 
-    float exposureValue = 25;
-    float targetExposureValue = -10;
+    float _exposureValue = 25;
+    float _targetExposureValue = -10;
 
+    #region Unity Events
     public UnityEvent OnConcludedCloseEffect = new UnityEvent();
     public UnityEvent OnConcludedCloseEye = new UnityEvent();
+    #endregion
 
     #region StartMethods
     private void Start()
@@ -36,10 +38,10 @@ public class EyeViewEffect : MonoBehaviour
     [ContextMenu("CloseEyesHold")]
     public void CloseEyesHold(bool isClosingEye)
     {
-        if ( ColorAdjustments.postExposure.value != targetExposure)
+        if ( ColorAdjustments.postExposure.value != _targetExposure)
         {
-            exposureValue = modificationExposureValueByTime;
-            targetExposureValue = targetExposure;
+            _exposureValue = _modificationExposureValueByTime;
+            _targetExposureValue = _targetExposure;
             StartCoroutine(EyeEffectRoutine());
         }
         else
@@ -57,8 +59,8 @@ public class EyeViewEffect : MonoBehaviour
     {
         if (ColorAdjustments.postExposure.value != 0)
         {
-            exposureValue = modificationExposureValueByTime * -1;
-            targetExposureValue = 0;
+            _exposureValue = _modificationExposureValueByTime * -1;
+            _targetExposureValue = 0;
             StartCoroutine(EyeEffectRoutine());
         }
     }
@@ -67,13 +69,13 @@ public class EyeViewEffect : MonoBehaviour
     #region Coroutine
     private IEnumerator EyeEffectRoutine()
     {
-        ColorAdjustments.postExposure.value -= exposureValue;
+        ColorAdjustments.postExposure.value -= _exposureValue;
 
-        yield return new WaitForSeconds(timeExposureModification);
+        yield return new WaitForSeconds(_timeExposureModification);
 
-        if (IsApproximately(ColorAdjustments.postExposure.value, targetExposureValue))
+        if (IsApproximately(ColorAdjustments.postExposure.value, _targetExposureValue))
         {
-            ColorAdjustments.postExposure.value = targetExposureValue;
+            ColorAdjustments.postExposure.value = _targetExposureValue;
         }
     }
     #endregion
@@ -81,6 +83,6 @@ public class EyeViewEffect : MonoBehaviour
 
     public bool IsApproximately(float a, float b)
     {
-        return Mathf.Abs(a - b) <= toleranceDistance;
+        return Mathf.Abs(a - b) <= _toleranceDistance;
     }
 }

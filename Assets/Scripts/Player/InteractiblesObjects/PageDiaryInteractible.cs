@@ -12,6 +12,7 @@ public class PageDiaryInteractible : MonoBehaviour, IinteractibleObject
 
     public bool InUse { get => holdingPage; set => holdingPage = value; }
 
+    #region Interactible Methods
     public void ReleaseObject()
     {
         holdingPage = false;
@@ -23,4 +24,5 @@ public class PageDiaryInteractible : MonoBehaviour, IinteractibleObject
         holdingPage = true;
         OnUsePage.Invoke();
     }
+    #endregion
 }

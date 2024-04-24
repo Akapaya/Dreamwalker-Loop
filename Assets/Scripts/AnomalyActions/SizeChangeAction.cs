@@ -7,14 +7,15 @@ public class SizeChangeAction : MonoBehaviour, IAnomaly
     [SerializeField] private List<GameObject> _objectsToResizeList;
     [SerializeField] private List<Vector3> _defaultObjectsSize;
 
-    [SerializeField] private float speedSize;
-    [SerializeField] private Vector3 sizeVector;
+    [SerializeField] private float _speedSize;
+    [SerializeField] private Vector3 _sizeVector;
 
-    private bool OnResize = false;
+    private bool onResize = false;
 
+    #region Process Anomaly
     public void OnActivateAnomaly()
     {
-        OnResize = true;
+        onResize = true;
 
         foreach (GameObject obj in _objectsToResizeList)
         {
@@ -24,18 +25,18 @@ public class SizeChangeAction : MonoBehaviour, IAnomaly
 
     private void Update()
     {
-        if (OnResize)
+        if (onResize)
         {
             foreach (GameObject obj in _objectsToResizeList)
             {
-                obj.transform.localScale = obj.transform.localScale + (sizeVector * speedSize);
+                obj.transform.localScale = obj.transform.localScale + (_sizeVector * _speedSize);
             }
         }
     }
 
     public void OnDeactivateAnomaly()
     {
-        OnResize = false;
+        onResize = false;
 
         int index = 0;
 
@@ -45,4 +46,5 @@ public class SizeChangeAction : MonoBehaviour, IAnomaly
             index++;
         }
     }
+    #endregion
 }

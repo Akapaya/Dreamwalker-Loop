@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public AudioSource atmosphereSound;
+    public AudioSource _atmosphereSound;
 
     public void RestartAtmosphereSound()
     {
-        atmosphereSound.Play();
+        _atmosphereSound.Play();
     }
 }

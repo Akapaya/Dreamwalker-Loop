@@ -9,6 +9,7 @@ public class RandomPlayAudio : MonoBehaviour, IAnomaly
 
     [SerializeField] private AudioSource _audio;
 
+    #region Process Anomaly
     public void OnActivateAnomaly()
     {
         StartCoroutine(PlaySound());
@@ -27,4 +28,5 @@ public class RandomPlayAudio : MonoBehaviour, IAnomaly
     {
         StopAllCoroutines();
     }
+    #endregion
 }

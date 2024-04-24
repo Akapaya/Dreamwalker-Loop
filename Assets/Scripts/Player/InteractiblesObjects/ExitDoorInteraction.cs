@@ -12,6 +12,7 @@ public class ExitDoorInteraction : MonoBehaviour, IinteractibleObject
 
     public bool InUse { get => isHoldingDoor; set => isHoldingDoor = value; }
 
+    #region Update Methods
     private void Update()
     {
         if (isHoldingDoor)
@@ -19,7 +20,9 @@ public class ExitDoorInteraction : MonoBehaviour, IinteractibleObject
             OnUsingDoor.Invoke(false);
         }
     }
+    #endregion
 
+    #region Interactible Methods
     public void UseObject()
     {
         if(isHoldingDoor == false)
@@ -33,4 +36,5 @@ public class ExitDoorInteraction : MonoBehaviour, IinteractibleObject
     {
         isHoldingDoor = false;
     }
+    #endregion
 }

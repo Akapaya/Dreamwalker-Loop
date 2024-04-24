@@ -5,13 +5,13 @@ using UnityEngine.Events;
 
 public class FpsMovePlayer : MonoBehaviour
 {
-    public Rigidbody Corpse;
+    [SerializeField] private Rigidbody _rigitBody;
 
-    public float vel;
+    [SerializeField] private float _movementSpeed;
 
-    public float eixoX;
+    private float _axisX;
 
-    public float eixoY;
+    private float _axisY;
 
     private bool lockMovement = false;
 
@@ -23,17 +23,18 @@ public class FpsMovePlayer : MonoBehaviour
 
     [SerializeField] private PlayAudioByTime playAudioByTime;
 
+    #region Update Methods
     private void Update()
     {
         if (!lockMovement)
         {
-            eixoX = Input.GetAxisRaw("Horizontal");
-            eixoY = Input.GetAxisRaw("Vertical");
+            _axisX = Input.GetAxisRaw("Horizontal");
+            _axisY = Input.GetAxisRaw("Vertical");
         }
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if (eixoX != 0 && isGrounded || eixoY != 0 && isGrounded)
+        if (_axisX != 0 && isGrounded || _axisY != 0 && isGrounded)
         {
             playAudioByTime.SetIsPlayingTrue();
         }
@@ -49,16 +50,17 @@ public class FpsMovePlayer : MonoBehaviour
         {
             return;
         }
-        Vector3 F = base.transform.forward * eixoY;
-        Vector3 R = base.transform.right * eixoX;
+        Vector3 F = base.transform.forward * _axisY;
+        Vector3 R = base.transform.right * _axisX;
         Vector3 C;
-            if (Corpse.velocity.y > 1f)
+            if (_rigitBody.velocity.y > 1f)
             {
-                Corpse.velocity = new Vector3(Corpse.velocity.x, 1f, Corpse.velocity.z);
+                _rigitBody.velocity = new Vector3(_rigitBody.velocity.x, 1f, _rigitBody.velocity.z);
             }
-            C = new Vector3(0f, Corpse.velocity.y, 0f);
-        Corpse.velocity = Vector3.ClampMagnitude(F + R, 1f) * vel + C;
+            C = new Vector3(0f, _rigitBody.velocity.y, 0f);
+        _rigitBody.velocity = Vector3.ClampMagnitude(F + R, 1f) * _movementSpeed + C;
     }
+    #endregion
 
     #region LockMethods
     public void LockMovement()

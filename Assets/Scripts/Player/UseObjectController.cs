@@ -4,41 +4,43 @@ using UnityEngine;
 
 public class UseObjectController : MonoBehaviour
 {
-    public Camera cam;
-    public GameObject lookObject;
+    public Camera Camera;
+    public GameObject LookObject;
     public EyeViewEffect EyeViewEffect;
 
-    private float cooldownTime = 1.0f;
-    private float nextUseTime = 0.0f;
+    private float _cooldownTime = 1.0f;
+    private float _nextUseTime = 0.0f;
 
+    #region Update Methods
     private void Update()
     {
-        Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+        Ray ray = Camera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
 
         RaycastHit Object;
 
         if (Physics.Raycast(ray, out Object))
         {
-            lookObject = Object.collider.gameObject;
+            LookObject = Object.collider.gameObject;
         }
         else
         {
-            lookObject = null;
+            LookObject = null;
         }
 
-        if (Input.GetButton("Use") && lookObject.GetComponent<IinteractibleObject>() != null && Time.time > nextUseTime)
+        if (Input.GetButton("Use") && LookObject.GetComponent<IinteractibleObject>() != null && Time.time > _nextUseTime)
         {
-            var interactibleObject = lookObject.GetComponent<IinteractibleObject>();
+            var interactibleObject = LookObject.GetComponent<IinteractibleObject>();
             if (interactibleObject.InUse == false)
             {
-                lookObject.GetComponent<IinteractibleObject>().UseObject();
+                LookObject.GetComponent<IinteractibleObject>().UseObject();
             }
             else
             {
-                lookObject.GetComponent<IinteractibleObject>().ReleaseObject();
+                LookObject.GetComponent<IinteractibleObject>().ReleaseObject();
             }
 
-            nextUseTime = Time.time + cooldownTime;
+            _nextUseTime = Time.time + _cooldownTime;
         }
     }
+    #endregion
 }

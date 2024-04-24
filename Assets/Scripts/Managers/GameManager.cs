@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     private int _collectedPagesCount = 0;
     [SerializeField] private int _instanciatedPagesCount = 0;
     private int _maxPagesCount = 5;
+    private int _counterToAppearPage = 0;
 
     [SerializeField] private PlayerRespawnManager PlayerRespawnManager;
 
@@ -18,8 +19,10 @@ public class GameManager : MonoBehaviour
     public UnityEvent DeactivatePage = new UnityEvent();
     #endregion
 
+    #region Delegates
     public delegate bool CheckIfGetAllPages();
     public static CheckIfGetAllPages CheckIfGetAllPagesHandle;
+    #endregion
 
     #region Start Methods
     private void OnEnable()
@@ -64,22 +67,20 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Page Check Method
-    private int counter = 0;
-
     public void CheckPageInstance()
     {
         if(_instanciatedPagesCount < _maxPagesCount)
         {
-            if (counter >= 3)
+            if (_counterToAppearPage >= 3)
             {
                 _instanciatedPagesCount++;
                 ActivatePage.Invoke();
-                counter = 0;
+                _counterToAppearPage = 0;
             }
             else
             {
                 DeactivatePage.Invoke();
-                counter++;
+                _counterToAppearPage++;
             }
         }
         else
@@ -87,11 +88,10 @@ public class GameManager : MonoBehaviour
             DeactivatePage.Invoke();
         }
     }
-    #endregion
 
     private bool CheckIfAllPagesCollected()
     {
-        if(_collectedPagesCount >= _maxPagesCount)
+        if (_collectedPagesCount >= _maxPagesCount)
         {
             return true;
         }
@@ -100,4 +100,5 @@ public class GameManager : MonoBehaviour
             return false;
         }
     }
+    #endregion
 }
